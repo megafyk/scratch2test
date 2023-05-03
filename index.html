@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+
+<style>
+       div.gallery {
+        margin: 5px;
+        border: 1px solid #ccc;
+        float: left;
+        width: 180px;
+    }
+
+
+    div.gallery video {
+        width: 80%;
+        height: auto;
+    }
+
+</style>
+
+<body>
+
+{{range .}}
+<div>
+    {{range .Items}}
+    <div class="gallery">
+        <video id="video" width="320" height="240" autoplay muted loop>
+            <source src="https://localhost:8080/assets/{{.}}" type="video/webm">
+            <track label="English" kind="captions" srclang="en" src="" default>
+        </video>
+    </div>
+    {{end}}
+</div>
+{{end}}
+</body>
+</html>
