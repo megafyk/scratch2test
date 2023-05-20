@@ -68,7 +68,7 @@ func DataSrcHttp() Data {
 }
 
 func WithOneConnection(data Data) {
-	client := http.DefaultClient
+	client := &http.Client{}
 	var wg sync.WaitGroup
 
 	for i := 0; i < len(data.Items); i++ {
