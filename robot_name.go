@@ -5,8 +5,8 @@ import (
 )
 
 type Robot struct {
-  name []string
-	tmp [][]string
+	name []string
+	tmp  [][]string
 }
 
 func (r *Robot) Name() (string, error) {
@@ -39,7 +39,7 @@ func (r *Robot) Reset() {
 	r.tmp = [][]string{r.name}
 }
 
-func(r *Robot) initNames(seed string, num int) {
+func (r *Robot) initNames(seed string, num int) {
 	if len(seed) >= 5 {
 		r.name = append(r.name, seed)
 		return
