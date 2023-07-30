@@ -21,9 +21,10 @@ func Answer(question string) (int, bool) {
 
 	words[len(words)-1] = strings.ReplaceAll(words[len(words)-1], "?", "")
 
-	var root Node
+	var root *Node
+	var prev *Node
+
 	numbered := 0
-	prev := root
 
 	nextIsNumber := true
 	// build tree
@@ -34,24 +35,23 @@ func Answer(question string) (int, bool) {
 				return 0, false
 			}
 			node := Node{words[i], nil, nil}
-			if root.value == "" {
-				root = node
+			if root == nil {
+				root = &node
 			} else {
 				prev.right = &node
 			}
-			prev = node
+			prev = &node
 			nextIsNumber = false
 		} else {
 			if operator(words[i]) {
 				if words[i] == "plus" || words[i] == "minus" {
-					node := Node{words[i], &prev, nil}
-					prev = node
-					root = node
+					node := Node{words[i], prev, nil}
+					root = &node
+					prev = root
 				} else {
 					tmp := prev.value
 					prev.value = words[i]
-					node := Node{tmp, nil, nil}
-					prev.left = &node
+					prev.left = &Node{tmp, nil, nil}
 				}
 			} else {
 				return 0, false
