@@ -2,6 +2,7 @@ package wordy
 
 import (
 	"errors"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -14,7 +15,9 @@ type Node struct {
 
 func Answer(question string) (int, bool) {
 	question = strings.ToLower(question)
-	words := strings.Split(question, " ")
+	question = strings.ReplaceAll(question, "by", "")
+	re := regexp.MustCompile("\\s+")
+	words := re.Split(question, -1)
 	if len(words) < 3 || "what" != words[0] || "is" != words[1] {
 		return 0, false
 	}
@@ -45,7 +48,7 @@ func Answer(question string) (int, bool) {
 		} else {
 			if operator(words[i]) {
 				if words[i] == "plus" || words[i] == "minus" {
-					node := Node{words[i], prev, nil}
+					node := Node{words[i], root, nil}
 					root = &node
 					prev = root
 				} else {
@@ -64,11 +67,31 @@ func Answer(question string) (int, bool) {
 		return 0, false
 	}
 
-	n, err := strconv.Atoi(root.value)
+	n, err := calculate(root)
 	if err != nil {
 		return 0, false
 	}
+
 	return n, true
+}
+
+func calculate(root *Node) (int, error) {
+	if root.left == nil && root.right == nil {
+		return strconv.Atoi(root.value)
+	}
+	if root.left == nil || root.right == nil {
+		return 0, errors.New("invalid tree")
+	}
+
+	a, err := calculate(root.left)
+	if err != nil {
+		return 0, err
+	}
+	b, err := calculate(root.right)
+	if err != nil {
+		return 0, err
+	}
+	return operate(root.value, a, b)
 }
 
 func operator(str string) bool {

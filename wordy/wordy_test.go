@@ -3,5 +3,5 @@ package wordy
 import "testing"
 
 func TestAnswer(t *testing.T) {
-	println(Answer("What is 3 plus 5 multiplied 7"))
+	println(Answer("What is -12 divided by 2 divided by -3?"))
 }
