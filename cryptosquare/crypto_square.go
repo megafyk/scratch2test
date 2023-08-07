@@ -10,14 +10,26 @@ func Encode(pt string) string {
 	var mx [][]string
 	var mxT [][]string
 
+
+
 	re := regexp.MustCompile("\\W")
 	pt = re.ReplaceAllString(pt, "")
 	pt = strings.ToLower(pt)
+	if len(pt) == 0 {
+		return pt
+	}
 	m := int(math.Sqrt(float64(len(pt))))
 	n := m
-	if m*m != len(pt) {
-		m++
+	plusM := true
+	for m * n < len(pt) {
+		if plusM {
+			m++
+		} else {
+			n++
+		}
+		plusM = !plusM
 	}
+
 
 	var tmp []string
 	for i := 0; i < len(pt); i++ {
