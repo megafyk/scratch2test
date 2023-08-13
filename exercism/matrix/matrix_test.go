@@ -5,10 +5,10 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	m, _ := New("9 8 7\n5 3 2\n6 6 7")
-	for i := 0; i < len(m.data); i++ {
-		for j := 0; j < len(m.data[0]); j++ {
-			print(m.data[i][j])
+	m, _ := New("1 2 3\n4 5 6\n7 8 9\n 8 7 6")
+	for i := 0; i < len(m); i++ {
+		for j := 0; j < len(m[0]); j++ {
+			print(m[i][j])
 			print(" ")
 		}
 		println()
