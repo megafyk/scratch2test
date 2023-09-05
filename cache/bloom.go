@@ -5,6 +5,7 @@ import (
 	"github.com/gocql/gocql"
 	"github.com/redis/go-redis/v9"
 	"github.com/rs/zerolog/log"
+	"github.com/scylladb/gocqlx/v2"
 	"github.com/scylladb/gocqlx/v2/table"
 	"time"
 )
@@ -12,12 +13,12 @@ import (
 var ctx = context.Background()
 
 type Notify struct {
-	ID         int    `db:"id"`
-	UserId     string `db:"user_id"`
-	NotifyType string `db:"notify_type"`
-	Phone      string `db:"phone"`
-	CreateTime uint64 `db:"create_time"`
-	UpdateTime uint64 `db:"update_time"`
+	ID         int       `db:"id"`
+	UserId     string    `db:"user_id"`
+	NotifyType string    `db:"notify_type"`
+	Phone      string    `db:"phone"`
+	CreateTime time.Time `db:"create_time"`
+	UpdateTime time.Time `db:"update_time"`
 }
 
 var notifyMetadata = table.Metadata{
@@ -34,16 +35,27 @@ func BloomCache() {
 	cluster := gocql.NewCluster("192.168.122.20:9042")
 	cluster.Keyspace = "mykeyspace"
 	cluster.ConnectTimeout = 60 * time.Second
-	session, err := cluster.CreateSession()
+	cluster.Consistency = gocql.One
+
+	session, err := gocqlx.WrapSession(cluster.CreateSession())
 	if err != nil {
-		log.Err(err)
+		log.Err(err).Msg("cannot create db session")
 		return
 	}
 
-	var notify []Notify
+	defer session.Close()
 
-	q := session.Query(notifyTbl.SelectAll()).Bind(notify)
-	q.Release()
+	var notify []Notify
+	q := session.Query(notifyTbl.SelectAll())
+	if err := q.SelectRelease(&notify); err != nil {
+		log.Err(err).Msg("cannot run query")
+		return
+	}
+
+	for i := 0; i < len(notify); i++ {
+		log.Info().Msgf("id=%d user_id=%s", notify[i].ID, notify[i].UserId)
+	}
+
 	// init cache
 	client := redis.NewClusterClient(&redis.ClusterOptions{
 		Addrs: []string{"192.168.122.20:6379", "192.168.122.20:6380", "192.168.122.20:6381"},
