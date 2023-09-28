@@ -3,21 +3,28 @@ from typing import List
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        ans = [[] for _ in range(len(s))]
-        dp = [[False for _ in range(len(s))] for _ in range(len(s))]
-        for i in range(len(s)):
-            for j in range(i, len(s)):
-                if j - i <= 1:
-                    dp[i][j] = (s[i] == s[j])
-                else:
-                    dp[i][j] = (s[i] == s[j]) and dp[i + 1][j - 1]
+        dp = []
+        n = len(s)
 
-                if dp[i][j]:
-                    ans[j-i].append(s[i:j + 1])
+        for i in range(n + 1):
+            dp.append([])  # create dp of size n+1
 
-        ans = [arr for arr in ans if arr]
-        print(dp)
-        return ans
+        dp[-1].append([])  # because for s[n:] i.e. empty string ,  answer = [[]]
+
+        # dp[i] store all possible palindrome partitions of string s[i:]
+
+        for i in range(n - 1, -1, -1):
+            for j in range(i + 1, n + 1):
+                curr = s[i:j]  # cosider each substring of s start from i-th character
+
+                if curr == curr[::-1]:  # if substring is palindrome
+
+                    # Consider first element of each partition is curr then add curr in the front of all partitions of string s[j:]  , which are already stored in dp[j]
+                    for e in dp[j]:
+                        dp[i].append([curr] + e)
+
+        return dp[0]  # All palindrome partitions of s[0:] = s
+
 
 s = Solution()
 print(s.partition('aab'))
