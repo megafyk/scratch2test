@@ -21,6 +21,20 @@ type Notify struct {
 	UpdateTime time.Time `db:"update_time"`
 }
 
+type Transaction struct {
+	Step           int     `db:"step"`
+	Type           string  `db:"type"`
+	Amount         float64 `db:"amount"`
+	NameOrig       string  `db:"nameOrig"`
+	OldBalanceOrg  float64 `db:"oldbalanceOrg"`
+	NewBalanceOrig float64 `db:"newbalanceOrig"`
+	NameDest       string  `db:"nameDest"`
+	OldBalanceDest float64 `db:"oldbalanceDest"`
+	NewBalanceDest float64 `db:"newbalanceDest"`
+	IsFraud        int     `db:"isFraud"`
+	IsFlaggedFraud int     `db:"isFlaggedFraud"`
+}
+
 var notifyMetadata = table.Metadata{
 	Name:    "notify",
 	Columns: []string{"id", "user_id", "notify_type", "phone", "create_time", "update_time"},
