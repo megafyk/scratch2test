@@ -3,28 +3,28 @@ from typing import List
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
-        dp = []
-        n = len(s)
 
-        for i in range(n + 1):
-            dp.append([])  # create dp of size n+1
+        dp = [[False for _ in range(len(s))] for _ in range(len(s))]
+        ans = []
+        curr = []
 
-        dp[-1].append([])  # because for s[n:] i.e. empty string ,  answer = [[]]
+        def dfs(i):
 
-        # dp[i] store all possible palindrome partitions of string s[i:]
+            if i >= len(s):
+                ans.append(list(curr))
 
-        for i in range(n - 1, -1, -1):
-            for j in range(i + 1, n + 1):
-                curr = s[i:j]  # cosider each substring of s start from i-th character
+            for j in range(i, len(s)):
+                if s[i] == s[j] and (j - i <= 2 or dp[i + 1][j - 1]):
+                    dp[i][j] = True
+                    curr.append(s[i:j + 1])
+                    dfs(j + 1)
+                    curr.pop()
 
-                if curr == curr[::-1]:  # if substring is palindrome
+        dfs(0)
 
-                    # Consider first element of each partition is curr then add curr in the front of all partitions of string s[j:]  , which are already stored in dp[j]
-                    for e in dp[j]:
-                        dp[i].append([curr] + e)
-
-        return dp[0]  # All palindrome partitions of s[0:] = s
+        return ans
 
 
 s = Solution()
-print(s.partition('aab'))
+# print(s.partition('aab')) #[["a","a","b"],["aa","b"]]
+print(s.partition('abbab'))  # [["a","b","b","a","b"],["a","b","bab"],["a","bb","a","b"],["abba","b"]]
