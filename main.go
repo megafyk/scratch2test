@@ -10,6 +10,10 @@ import (
 	"os"
 )
 
+type Data struct {
+	Items []string `json:"items"`
+}
+
 func main() {
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	portHttp := "8080"
