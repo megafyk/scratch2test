@@ -12,8 +12,6 @@ class Solution:
 #         #             if (nums[i] & nums[j] & nums[k]) == 0:
 #         #                 cnt += 1
 #         # return cnt
-
-        n = len(nums)
         cnt = 0
         freq = {}
         for x in nums:
