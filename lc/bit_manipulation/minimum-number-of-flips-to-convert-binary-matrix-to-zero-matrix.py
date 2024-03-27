@@ -19,8 +19,8 @@ class Solution:
             if d != -1:
                 res = min(res, d)
 
-        return res if res != (n*m+1) else -1
 
+        return res if res != (n*m+1) else -1
     def flip(self, s, mask, n, m):
         for i in range(n*m):
             if self.test(mask, i):
