@@ -16,7 +16,7 @@ class Solution:
 
         # return dp[n-1] if dp[n-1] != n else -1
         
-
+        # greedy approach, complexity O(n), mem O(1)
         n = len(nums)
         idx_cur = 0
         idx_nxt = 0
