@@ -23,5 +23,5 @@ class Solution:
                     cur = cur.right
 
                 root.val = cur.val
-                root.left = self.deleteNode(root.left, cur.val)
+                root.left = self.deleteNode(root.left, cur.val)sudo
         return root
