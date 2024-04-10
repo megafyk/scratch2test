@@ -5,11 +5,14 @@ class Solution:
         if l == h:
             return l
         i, j = l, h
+
         pivot_idx = random.randint(l, h)
+        
         pivot = (
             arr[pivot_idx][0] * arr[pivot_idx][0]
             + arr[pivot_idx][1] * arr[pivot_idx][1]
         )
+
         while i < j:
             while arr[i][0] * arr[i][0] + arr[i][1] * arr[i][1] < pivot:
                 i += 1
@@ -30,9 +33,10 @@ class Solution:
             return self.quickselect(arr, j + 1, h, k - (j - l + 1))
 
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        # complexity O(nlogn), mem O(1)
         idx = self.quickselect(points, 0, len(points) - 1, k)
         res = []
-        for i in range(idx):
+        for i in range(idx+1):
             res.append(points[i])
         return res
 
