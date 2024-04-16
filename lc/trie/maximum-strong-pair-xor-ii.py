@@ -35,7 +35,7 @@ class Solution:
         for i in range(len(bnum)):
             bit = int(bnum[i])
             toggle_bit = bit ^ 1
-            if curr.child[toggle_bit]:
+            if curr.child[toggle_bit] and curr.child[toggle_bit].cnt > 0:
                 res = res << 1 | toggle_bit
                 curr = curr.child[toggle_bit]
             else:
