@@ -1,25 +1,18 @@
-from collections import defaultdict
 class Solution:
-    def dfs(self, res, path, gp, visited, src, des):
+    def dfs(self, res, path, gp, src, des):
+
         if path and path[-1] == des:
             res.append(list(path))
             return
-
-        visited[src] = True
-        for node in gp[src]:
-            if visited[node]:
-                continue
-            
+        for node in gp[src]:            
             path.append(node)
-            self.dfs(res, path, gp, visited, node, des)
+            self.dfs(res, path, gp, node, des)
             path.pop()
-        visited[src] = False
 
     def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
         # complexity: time O(u^v), mem O(n)
         n = len(graph)
-        visited = [False] * n
         res = []
         path = [0]
-        self.dfs(res, path, graph, visited, 0, n-1)
+        self.dfs(res, path, graph, 0, n-1)
         return res
