@@ -14,6 +14,8 @@ class Solution:
         return 0 <= x < rows and 0 <= y < cols and maze[x][y] == 0 
 
     def shortest_distance(self, maze: List[List[int]], start: List[int], destination: List[int]) -> int:
+        # dijkstra algorithm
+        # complexity: time O(r*c*log(r*c)), mem O(r*c)
         rows = len(maze)
         cols = len(maze[0])
 
