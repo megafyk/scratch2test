@@ -6,3 +6,6 @@ class Solution:
         #     if dp[i-3] and dp[i-2] and dp[i-1]:
         #         dp[i] = False
         # return dp[-1]
+
+
+        
