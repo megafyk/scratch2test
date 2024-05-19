@@ -1,0 +1,15 @@
+@startuml
+participant client as client
+participant drive_server as drive
+database block_storage as block
+participant app_server as app
+database metadata_db as meta
+
+client -> app: download
+app -> meta: get file's metadata
+app --> client: ok
+client -> drive: download file by blocks
+drive -> block: blocks
+block --> drive
+drive --> blocks
+@enduml

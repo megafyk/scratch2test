@@ -1,0 +1,16 @@
+@startuml
+participant client as client
+participant drive_server as drive
+database block_storage as block
+participant app_server as app
+database metadata_db as meta
+
+client -> app: upload file's metadata
+app -> meta: insert new upload record: pending
+app --> client: ok
+client -> drive: upload file
+drive -> drive: receice stream and devide by chunk
+drive -> block: upload chunk files, each has an object id
+drive -> app: update metadata
+app -> meta: update upload record: finish
+@enduml
