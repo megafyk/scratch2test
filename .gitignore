@@ -281,3 +281,5 @@ fabric.properties
 
 server.key
 server.crt
+
+venv
