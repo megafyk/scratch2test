@@ -3,22 +3,23 @@ class TrieNode:
         self.child = [None] * 2
         self.isnum = False
 
+
 class Solution:
     def insert(self, root, num, bin_max_num):
         curr = root
         bnum = bin(num)[2:]
-        bnum = '0' * (len(bin_max_num) - len(bnum)) + bnum
+        bnum = "0" * (len(bin_max_num) - len(bnum)) + bnum
         for i in range(len(bnum)):
             bit = int(bnum[i])
             if not curr.child[bit]:
                 curr.child[bit] = TrieNode()
             curr = curr.child[bit]
         curr.isnum = True
-    
+
     def find_max_xor(self, root, num, bin_max_num):
         curr = root
         bnum = bin(num)[2:]
-        bnum = '0' * (len(bin_max_num) - len(bnum)) + bnum
+        bnum = "0" * (len(bin_max_num) - len(bnum)) + bnum
         res = 0
         for i in range(len(bnum)):
             bit = int(bnum[i])
