@@ -283,3 +283,6 @@ server.key
 server.crt
 
 venv
+
+data.csv
+data_out.csv

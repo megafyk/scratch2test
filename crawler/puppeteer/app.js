@@ -1,65 +1,30 @@
 const puppeteer = require('puppeteer');
-const fs = require('fs');
-const { parse } = require('csv-parse/sync');
-require('dotenv').config();
-
-// Login credentials
-const baseUrl = process.env.BASE_URL;
-const loginUrl = baseUrl + "/#/signin";
-const paymentUrl = baseUrl + "/api/paymentTransaction";
-const username = process.env.USERNAME;
-const password = process.env.PASSWORD;
-
 
 (async () => {
-  const browser = await puppeteer.launch();
+  // Launch a new browser instance in headless mode
+  const browser = await puppeteer.launch({
+    headless: true, // Set this to false to see the browser window
+    slowMo: 250, // Slow down the script by 250ms for better visibility
+    devtools: true // Open the Chrome DevTools for debugging
+  });
+
+  // Create a new page
   const page = await browser.newPage();
-  // Navigate to the login page
-  await page.goto(loginUrl);
 
-  // Fill in the login form and submit
-  await page.type('#username', username);
-  await page.type('#password', password);
-  await Promise.all([
-    page.click('button[type="submit"].ant-btn.ant-btn-primary'),
-    page.waitForNavigation(),
-  ]);
+  // Navigate to a website
+  await page.goto('https://www.google.com');
 
-  // Read the CSV file with transaction IDs
-  let csvData = fs.readFileSync('file.csv', 'utf8');
-  let transactionIds = parse(csvData, {
-    columns: true,
-    skip_empty_lines: true
-  }).map(row => row.transactionId);
+  // Wait for the page to load
+  await page.waitForNavigation();
 
-  // Fetch the transaction details
-  for (let transactionId of transactionIds) {
-    let queryParams = {
-      page: 282,
-      api: 'find',
-      queryInput: {
-        transactionId: {
-          contains: transactionId
-        }
-      },
-      limit: 10,
-      skip: 0,
-      sort: [
-        {
-          id: 'desc'
-        }
-      ]
-    };
+  // Find an element on the page and click it
+  await page.click('#my-button');
 
-    let queryUrl = new URLSearchParams(queryParams).toString();
-    let url = `${paymentUrl}?${queryUrl}`;
+  // Wait for the page to update
+  await page.waitForNavigation();
 
-    // Use Puppeteer to fetch the JSON response
-    let response = await page.goto(url);
-    let transactionData = await response.json();
-    console.log(`Transaction ID: ${transactionId}`);
-    console.log(transactionData);
-  }
+  // Take a screenshot of the page
+  await page.screenshot({ path: 'example.png' });
 
   // Close the browser
   await browser.close();
