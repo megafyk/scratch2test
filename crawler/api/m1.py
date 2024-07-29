@@ -1,11 +1,16 @@
 import csv
+import os
 
 import requests
+
+TOKEN = os.getenv("TOKEN")
+if not TOKEN:
+    raise Exception("TOKEN is required")
 
 headers = {
     "accept": "application/json, text/plain, */*",
     "accept-language": "en-US,en;q=0.9,vi;q=0.8,ja;q=0.7,ko;q=0.6,zh;q=0.5",
-    "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InVzZXJJZCI6NjQsInJvbGVJZCI6MTAsInByb3ZpZGVySWQiOjAsInBhcnRuZXJJZHMiOltdLCJzY29wZSI6InVzZXIiLCJleHBpcmVBY2Nlc3NUb2tlbiI6MjE2MDAwLCJleHBpcmVSZWZyZXNoVG9rZW4iOjg2NDAwMDB9LCJpYXQiOjE3MjE2MTAzMDAsImV4cCI6MTcyMTgyNjMwMH0.TRK1fZCOllQXpCjkHuDxtIg1qCj9sD5rJFQ13QDADwg",
+    "authorization": f"Bearer {TOKEN}",
     "content-type": "application/json",
     "dnt": "1",
     "origin": "https://vds-cms.mpoint.vn",
@@ -19,6 +24,7 @@ headers = {
     "sec-fetch-site": "same-site",
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
 }
+
 
 with open("data.csv", "r", newline="") as r_file:
     reader = csv.reader(r_file)
