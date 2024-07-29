@@ -5,7 +5,7 @@ class Solution:
         n = len(stones)
         s = sum(stones)
         target = s // 2
-
+        # stones and target
         dp = [[0] * (target + 1) for _ in range(n + 1)]
 
         for i in range(1, n + 1):
