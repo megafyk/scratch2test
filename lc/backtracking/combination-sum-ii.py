@@ -7,9 +7,11 @@ class Solution:
             return
 
         for i in range(start, len(candidates)):
+            if candidates[i] > target:
+                return
             if i > start and candidates[i] == candidates[i-1]:
                 # each comb appeared once
-                continue
+                continue 
             comb.append(candidates[i])
             self.backtrack(candidates, target - candidates[i], ans, comb, i+1)
             comb.pop()             
