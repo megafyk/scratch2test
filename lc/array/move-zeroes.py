@@ -5,13 +5,8 @@ class Solution:
         """
         # time O(n), space O(1)
         n = len(nums)
-        i, j = 0, 0
-        while j < n:
-            if nums[i] == 0:
-                for t in range(j, n):
-                    if nums[t] != 0:
-                        break
-                nums[i], nums[t] = nums[t], nums[i]
-                j = t
-            i += 1
-            j += 1
+        i = 0
+        for j in range(n):
+            if nums[j] != 0:
+                nums[i], nums[j] = nums[j], nums[i]
+                i += 1
