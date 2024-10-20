@@ -1,5 +1,7 @@
 class Solution:
     def parseBoolExpr(self, exp: str) -> bool:
+        # stack
+        # time O(n), space O(n)
         stack = []
         
         for ch in exp:
