@@ -9,12 +9,8 @@ class Solution:
             for j in range(n):
                 matrix[i][j] = int(matrix[i][j])
                 if matrix[i][j] and i >= 1 and j >= 1:
-                    matrix[i][j] = (
-                        min(matrix[i - 1][j - 1], matrix[i - 1][j], matrix[i][j - 1])
-                        + 1
-                    )
+                    matrix[i][j] = min(matrix[i-1][j-1], matrix[i-1][j], matrix[i][j-1]) + 1
                     ans = max(ans, matrix[i][j])
                 elif matrix[i][j]:
-                    matrix[i][j] == 1
                     ans = max(ans, matrix[i][j])
         return ans * ans
