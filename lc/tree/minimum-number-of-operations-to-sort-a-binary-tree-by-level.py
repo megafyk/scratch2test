@@ -17,7 +17,7 @@ class Solution:
                     swap += 1
                     cur_pos = pos[arr_sort[i]]
                     pos[arr[i]] = cur_pos
-                    arr[cur_pos] = arr[i]
+                    arr[cur_pos], arr[i] = arr[i], arr[cur_pos]
             return swap
 
         res = 0
