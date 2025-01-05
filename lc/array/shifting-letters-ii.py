@@ -18,5 +18,5 @@ class Solution:
             prefix_idx -= 1
             diff += prefix[prefix_idx]
         # decode
-        decode = [chr(((c + 26) % 26) + 97) for c in encode]
+        decode = [chr(((c + 26) % 26) + ord('a')) for c in encode]
         return ''.join(decode)
