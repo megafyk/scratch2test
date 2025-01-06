@@ -13,7 +13,7 @@ class Solution:
                     cnt += 1
                     s1_i = 0
 
-            dp[i] = (cnt, s1_i)
+            dp[i] = (cnt, s1_i) # s1_i is the next index to start
 
         rep = 0
         idx = 0
