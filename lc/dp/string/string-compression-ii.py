@@ -3,7 +3,7 @@ class Solution:
         # dp string
         # time O(n*k*26*n), space O(n*k*26*n)
 
-        # @cache
+        @cache
         def count(idx, k, prev, prev_cnt):
             if k < 0: return sys.maxsize
             if idx == len(s): return 0
