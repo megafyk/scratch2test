@@ -1,17 +1,14 @@
 class Solution:
     def check(self, nums: List[int]) -> bool:
         # array rotate
-        # time O(n), space O(n)
-        n = len(nums)
-        x = 0
-        for i in range(n-1):
-            if nums[i] > nums[i+1]:
-                x = i+1
-                break
-        if x == 0: return True
-        nums = nums * 2
-        for i in range(x, x + n - 1):
-            if nums[i] > nums[i+1]:
-                return False
-
-        return True
+        # time O(N), space O(1)
+        N = len(nums)
+        cnt = 1
+        for i in range(1, N * 2):
+            if nums[(i-1) % N] <= nums[i%N]:
+                cnt += 1
+            else:
+                cnt = 1
+            if cnt == N:
+                return True
+        return False
