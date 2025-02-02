@@ -12,4 +12,4 @@ class Solution:
                 cnt = 1
             if cnt == N:
                 return True
-        return N == 1
+        return False
