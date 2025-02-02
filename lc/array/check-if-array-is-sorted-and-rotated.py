@@ -3,6 +3,7 @@ class Solution:
         # array rotate
         # time O(N), space O(1)
         N = len(nums)
+        if N == 1: return True
         cnt = 1
         for i in range(1, N * 2):
             if nums[(i-1) % N] <= nums[i%N]:
@@ -11,4 +12,4 @@ class Solution:
                 cnt = 1
             if cnt == N:
                 return True
-        return False
+        return N == 1
