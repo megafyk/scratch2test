@@ -13,4 +13,3 @@ class Solution:
             else:
                 equal.append(num)
         return smaller + equal + bigger
-        
