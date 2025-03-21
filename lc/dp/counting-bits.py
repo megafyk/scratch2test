@@ -1,6 +1,6 @@
 class Solution:
     def countBits(self, n: int) -> List[int]:
-        # dp 1bit is equal * 2
+        # dp 1 bit is equal * 2
         # complexity: time O(n), mem O(n)
         res = [0] * (n + 1)
 
