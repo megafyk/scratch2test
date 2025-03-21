@@ -1,28 +1,26 @@
 class Solution:
+    def __init__(self, n) -> None:
+        self.par = list(range(n))
 
-    def find(self, cur, par):
-        if cur != par[cur]:
-            cur = self.find(par[cur], par)
-        return par[cur]
-    
-    def disjoinset(self, n, edges):
+    def find(self, cur):
+        if cur != self.par[cur]:
+            cur = self.find(self.par[cur])
+        return self.par[cur]
+
+    def union(self, u, v):
         # n is number of vertices
         # node -> node edges = [[1,2],[2,3],[3,1]]
         # init parrent root
-        par = [i for i in range(n)]
+        # find step
+        p1 = self.find(u)
+        p2 = self.find(v)
 
-        
-        for i, j in edges:
-            # find step
-            p1 = self.find(i, par)
-            p2 = self.find(j, par)
-            
-            # i,j has same root <=> i,j same set
-            if p1 == p2:
-                continue
+        # i,j has same root <=> i,j same set
+        if p1 == p2:
+            return
 
-            # union step
-            if p1 < p2:
-                par[p2] = p1
-            else:
-                par[p1] = p2
+        # union step
+        if p1 < p2:
+            self.par[p2] = p1
+        else:
+            self.par[p1] = p2
