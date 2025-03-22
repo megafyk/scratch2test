@@ -21,6 +21,8 @@ class UnionFind:
             
 class Solution:
     def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
+        # graph union find
+        # time O(E + VlogV + V^2), space O(V)
         uf = UnionFind(n)
         graph = defaultdict(list)
 
