@@ -1,29 +1,18 @@
 class Solution:
-    def pos(self, c):
-        return ord(c) - ord('a')
-
     def partitionLabels(self, s: str) -> List[int]:
-        # complexity: time O(n), mem O(1)
-        n = len(s)
-        res = []
+        # two pointers
+        # time O(N), space O(1)
 
-        last = {}
-        for i in range(n):
-            last[s[i]] = i
+        res = []
+        last = defaultdict(int)
+        for i,c in enumerate(s):
+            last[c] = i
+        size,end = 0,0
+        for i,c in enumerate(s):
+            size += 1
+            end = max(end, last[c])
+            if i == end:
+                res.append(size)
+                size = 0
         
-        i,j = 0,0
-        res = []
-        for i in range(n):
-            target = s[i]
-            while j < n:
-                if last[target] < last[s[j]]:
-                    target = s[j]
-
-                if s[j] == target and j == last[target]:
-                    res.append(j-i+1)
-                    i,j = j+1, j+1
-                else:
-                    j+=1
-
         return res
-
