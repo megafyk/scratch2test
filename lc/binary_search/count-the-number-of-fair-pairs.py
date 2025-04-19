@@ -17,5 +17,5 @@ class Solution:
         for i in range(N):
             low = lower - nums[i]
             up = upper - nums[i]
-            res += search(up, i, N) - search(low-1, i, N)
+            res += search(up, i+1, N) - search(low-1, i+1, N)
         return res
