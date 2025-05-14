@@ -28,7 +28,7 @@ class Solution:
 
         visit = set()
         for u in range(n):
-            if u not in visit:
+            if u not in visit: # optimize part
                 if not dfs(u, None, visit):
                     return False
         return True
