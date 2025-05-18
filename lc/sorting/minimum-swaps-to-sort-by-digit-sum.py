@@ -2,7 +2,7 @@ from functools import cmp_to_key
 
 class Solution:
     def minSwaps(self, nums: List[int]) -> int:
-        # array
+        # sorting + array
         # time O(d*n + nlogn + n) = O(d*n + nlogn), space O(n+n) = O(n)
         sum_d = defaultdict(int)
 
