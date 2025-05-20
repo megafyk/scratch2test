@@ -1,34 +1,36 @@
-from collections import deque
-from typing import List
-
-
 class Solution:
     def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
-        if n == 1:
-            return [0]
-
-        degree = [0 for _ in range(n)]
-        graph = [[] for _ in range(n)]
-        for v1, v2 in edges:
-            graph[v1].append(v2)
-            graph[v2].append(v1)
-            degree[v1] += 1
-            degree[v2] += 1
-
-        q = deque([i for i in range(n) if degree[i] == 1])
-
-        while n > 2:
-            n -= len(q)
-            next_q = deque()
-            while q:
-                u = q.popleft()
-                for v in graph[u]:
-                    degree[v] -= 1
-                    if degree[v] == 1:
-                        next_q.append(v)
-            q = next_q
-
+        # bfs + topo
+        # time O(n+e), space O(n+e)
+        indegree = [0] * n
+        adj = defaultdict(list)
+        for u,v in edges:
+            indegree[u] += 1
+            indegree[v] += 1
+            adj[u].append(v)
+            adj[v].append(u)
+        q = deque()
+        visit = [False] * n 
         res = []
+        for i in range(n):
+            if indegree[i] == 1 or indegree[i] == 0:
+                q.append(i)
+                visit[i] = True
+                res.append(i)
+        
         while q:
-            res.append(q.popleft())
-        return res
+            res = []
+            for _ in range(len(q)):
+                u = q.popleft()
+                res.append(u)
+                indegree[u] -= 1
+                for v in adj[u]:
+                    if not visit[v]:
+                        indegree[v] -= 1
+                        if indegree[v] == 1:
+                            q.append(v)
+                            visit[v] = True
+
+        return res      
+
+        
