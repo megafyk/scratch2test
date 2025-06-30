@@ -1,9 +1,13 @@
 class Solution:
     def findLHS(self, nums: List[int]) -> int:
-        # complexity: time O(n), mem O(n)
-        dic = Counter(nums)
+        # hashtable
+        # time O(n), space O(n)
+        freq = Counter(nums)
+
         res = 0
-        for k,val in dic.items():
-            if k-1 in dic: res = max(res, val+dic[k-1])
-            if k+1 in dic: res = max(res, val+dic[k+1])
+        for k, v in freq.items():
+            if (k + 1) in freq:
+                res = max(res, v + freq[k + 1])
+            if (k - 1) in freq:
+                res = max(res, v + freq[k - 1])
         return res
