@@ -12,15 +12,15 @@ class Solution:
             if not pq:
                 cur_day = events[i][0]
             
-            while i < n and events[i][0] == cur_day:
+            while i < n and events[i][0] == cur_day: # add event can be joined
                 heappush(pq, events[i][1])
                 i += 1
             
-            while pq and pq[0] < cur_day: # remove events already ended
-                heappop(pq)
-
             if pq:
                 heappop(pq) # join event end ealiest
                 res += 1
                 cur_day += 1
+
+            while pq and pq[0] < cur_day: # remove events already ended
+                heappop(pq)
         return res
