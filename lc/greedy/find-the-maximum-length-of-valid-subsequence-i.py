@@ -1,6 +1,6 @@
 class Solution:
     def maximumLength(self, nums: List[int]) -> int:
-        # dp knapsack 0/1
+        # greedy
         # time O(n), space O(1)
         t = nums[0] % 2
         all_odd = all_even = both = 0
