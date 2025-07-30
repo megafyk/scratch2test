@@ -1,29 +1,38 @@
 class Solution:
-    def helper(self, nums, n, k, dp, i, s1):
-        if s1 >= k:
-            return 0
-        if i >= n:
-            return 1
-        if dp[i][s1]:
-            return dp[i][s1]
-
-        total = 0
-        total += self.helper(nums, n, k, dp, i + 1, s1 + nums[i])
-        total += self.helper(nums, n, k, dp, i + 1, s1)
-        dp[i][s1] = total % self.mod
-        return total
-
     def countPartitions(self, nums: List[int], k: int) -> int:
-        # reduce number of dp state
-        # complexity: time O(n*k), mem O(n*k)
+        # dp knapsack => count # ways sum partition < k
+        # time O(n*k), space O(k)
+        mod = 10**9 + 7
         n = len(nums)
-        s = sum(nums)
-        # case s1 < k, s2 < k
-        if s < 2 * k:
+        if sum(nums) < 2 * k:
             return 0
-        dp = [[None] * k for _ in range(n)]
-        self.mod = 1000000007
-        total_ways = 1 << n
-        # case (s1 < k, s2 >= k) == (s1 >= k, s2 < k)
-        invalid_ways = 2 * self.helper(nums, n, k, dp, 0, 0)
-        return (total_ways - invalid_ways) % self.mod
+
+        dp = [0] * k  # dp[s] = number of subsets with total exactly s
+        dp[0] = 1
+        for num in nums:
+            for i in range(k - 1, -1, -1):
+                if i >= num:
+                    dp[i] = (dp[i] + dp[i - num]) % mod
+
+        return (2**n - sum(dp) * 2) % mod
+
+
+class Solution1:
+    def countPartitions(self, nums: List[int], k: int) -> int:
+        mod = 10**9 + 7
+        n = len(nums)
+        if sum(nums) < 2 * k:
+            return 0
+
+        @cache
+        def dfs(idx, cur):
+            if cur >= k:
+                return 0
+            if idx >= n:
+                return 1
+            res = 0
+            res += dfs(idx + 1, cur) % mod
+            res += dfs(idx + 1, cur + nums[idx]) % mod
+            return res % mod
+
+        return (2**n - dfs(0, 0) * 2) % mod
