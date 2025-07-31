@@ -1,25 +1,29 @@
 class Solution:
     def subarrayBitwiseORs(self, arr: List[int]) -> int:
-        # dp bitwise
-        # time O(n), space O(n)
-        s = set()
-        endwith = set()
+        # dp + bitmask
+        # time O(32n), space O(n)
+        or_sub_arr = set()
+        res = set()
         for num in arr:
-            endwith = {num | i for i in endwith}
-            endwith.add(num)
-            s |= endwith
-        return len(s)
+            or_sub_arr = {num | t for t in or_sub_arr}
+            or_sub_arr.add(num)
+            res |= or_sub_arr # union 2 set
+        return len(res)
 
-    # def subarrayBitwiseORs(self, arr: List[int]) -> int:
-    #     n = len(arr)
-    #     s = set()
-    #     dp = [[0] * (n+1) for _ in range(n)]
-    #     for i in range(n):
-    #         dp[i][i] = arr[i]
+class Solution1:
+    def subarrayBitwiseORs(self, arr: List[int]) -> int:
+        # dp + bitmask
+        # time O(32n), space O(n)
+        or_sub_arr = set()
+        res = set()
+        for num in arr:
+            new_or_sub_arr = set()
+            for t in or_sub_arr:
+                new_or_sub_arr.add(num | t)
 
-    #     for i in range(n):
-    #         for j in range(i+1, n+1):
-    #             dp[i][j] = dp[i][j-1] | arr[j-1]
-    #             s.add(dp[i][j])
+            new_or_sub_arr.add(num)
+            or_sub_arr = new_or_sub_arr
 
-    #     return len(s)
+            for t in or_sub_arr:
+                res.add(t)
+        return len(res)
