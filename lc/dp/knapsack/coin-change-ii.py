@@ -1,37 +1,25 @@
 class Solution:
     def change(self, amount: int, coins: List[int]) -> int:
-        # unbound knapsack
-        # time O(n*m), space O(n)
-        n = len(coins)
-        dp1 = [0] * (amount+1) 
-        for j in range(n):
-            dp2 = [0] * (amount+1)
-            dp2[0] = 1
-            for i in range(1, amount + 1):    
-                comb = dp1[i]
-                if i - coins[j] >= 0:
-                    comb = dp1[i] + dp2[i-coins[j]]
-                dp2[i] = comb
-            dp1 = dp2
-        return dp1[-1]
+        # dp knapsack bottom up
+        # time O(amount*len(coins)), space O(amount)
+        dp = [1] + [0] * amount
+        for j in range(len(coins)):
+            nw_dp = [1] + [0] * amount
+            for i in range(1, amount+1):
+                tmp = dp[i]
+                if i >= coins[j]:
+                    tmp = nw_dp[i - coins[j]] + dp[i]
+                nw_dp[i] = tmp
+            dp = nw_dp
+        return dp[amount]
 
-    # def dp(self, amount, coins, i, total, memo):
-    #     if total == amount:
-    #         return 1
-    #     if total > amount:
-    #         return 0
-    #     if i == len(coins):
-    #         return 0
-    #     if (i, total) in memo:
-    #         return memo[(i, total)]
-    #     comb = self.dp(amount, coins, i, total + coins[i], memo) + self.dp(
-    #         amount, coins, i + 1, total, memo
-    #     )
-    #     memo[(i, total)] = comb
-    #     return comb
-
-    # def change(self, amount: int, coins: List[int]) -> int:
-    #     # unbound knapsack
-    #     # time: O(n*m), space O(n*m)
-    #     memo = {}
-    #     return self.dp(amount, coins, 0, 0, memo)
+class Solution1:
+    def change(self, amount: int, coins: List[int]) -> int:
+        # dp top down
+        @cache
+        def dfs(a, idx):
+            if a == 0: return 1
+            if a < 0: return 0
+            if idx == len(coins): return 0
+            return dfs(a-coins[idx], idx) + dfs(a, idx+1)
+        return dfs(amount, 0)
