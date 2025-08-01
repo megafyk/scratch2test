@@ -3,12 +3,12 @@ class Solution:
         # dp knapsack bottom up
         # time O(amount*len(coins)), space O(amount)
         dp = [1] + [0] * amount
-        for j in range(len(coins)):
+        for coin in coins:
             nw_dp = [1] + [0] * amount
             for i in range(1, amount+1):
-                tmp = dp[i]
-                if i >= coins[j]:
-                    tmp = nw_dp[i - coins[j]] + dp[i]
+                tmp = dp[i] # not choose coin
+                if i >= coin:
+                    tmp += nw_dp[i - coin] # choose coin
                 nw_dp[i] = tmp
             dp = nw_dp
         return dp[amount]
