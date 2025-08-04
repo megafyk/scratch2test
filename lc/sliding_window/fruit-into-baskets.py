@@ -1,28 +1,20 @@
-from typing import List
-
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
-
-        slow, fast = 0, 0
-        d_win = {}
-        ans = 0
-        while fast < len(fruits):
-            if fruits[fast] not in d_win:
-                d_win[fruits[fast]] = 0
-            d_win[fruits[fast]] += 1
-            fast += 1
-            while len(d_win) > 2:
-                d_win[fruits[slow]] -= 1
-                if d_win[fruits[slow]] == 0:
-                    d_win.pop(fruits[slow])
-                slow += 1
-
-            ans = max(ans, fast - slow)
-
-        return ans
-
-s = Solution()
-print(s.totalFruit([1,2,1]))
-print(s.totalFruit([0,1,2,2]))
-print(s.totalFruit([1,2,3,2,2]))
-print(s.totalFruit([3,3,3,1,2,1,1,2,3,3,4]))
+        # sliding window
+        # time O(n), space O(1)
+        cnt = defaultdict(int)
+        res = 0
+        n = len(fruits)
+        i = 0
+        for j in range(n):
+            if fruits[j] not in cnt:
+                while len(cnt) == 2:
+                    cnt[fruits[i]] -= 1
+                    if cnt[fruits[i]] == 0:
+                        del cnt[fruits[i]]
+                    i+=1
+                cnt[fruits[j]] = 1
+            else:
+                cnt[fruits[j]] += 1
+            res = max(res, sum(cnt.values()))
+        return res
