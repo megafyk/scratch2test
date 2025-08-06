@@ -1,39 +1,42 @@
 class Solution:
     def findTargetSumWays(self, nums: List[int], target: int) -> int:
-        # dp distinct ways bottom up
-        # time O(n*target), space O(target)
+        total = sum(nums)
+        if (total + target) % 2 != 0 or abs(target) > total:
+            return 0
+        sum_to_find = (total + target) // 2
+        
+        dp = [0] * (sum_to_find + 1)
+        dp[0] = 1  # Base case: one way to make sum 0 (empty subset)
+        
+        for num in nums:
+            for j in range(sum_to_find, num - 1, -1):
+                dp[j] += dp[j - num]
+                
+        return dp[sum_to_find]
+
+class Solution1:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        # bottom up
         n = len(nums)
-
         dp = defaultdict(int)
-        dp = {nums[0]: 1, -nums[0]: 1}
-        if nums[0] == 0: dp[0] = 2
-        for i in range(1, n):
-            new_dp = defaultdict(int)
-            for k,v in dp.items():
-                new_dp[k + nums[i]] += dp[k]
-                new_dp[k - nums[i]] += dp[k]
-            dp = new_dp
-        if target not in dp: return 0
+        dp[0] = 1
+        for num in nums:
+            nw_dp = defaultdict(int)
+            for t in dp.keys():
+                nw_dp[t+num] += dp[t]
+                nw_dp[t-num] += dp[t]
+            dp = nw_dp
         return dp[target]
+        
+class Solution2:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        # topdown
+        n = len(nums)
+        
+        @cache
+        def dfs(idx, target):
+            if idx == n:
+                return 1 if target == 0 else 0
+            return dfs(idx + 1, target - nums[idx]) + dfs(idx + 1, target + nums[idx])
 
-
-# from collections import defaultdict
-
-# class Solution:
-#     def dp(self, nums, n, target, memo, i, s):
-#         if i >= n:
-#             return 1 if s == target else 0
-#         if (i,s) in memo: return memo[(i,s)]
-#         plus = self.dp(nums, n, target, memo, i+1, s + nums[i])
-#         minus = self.dp(nums, n, target, memo, i+1, s - nums[i])
-#         memo[(i,s)] = plus + minus
-#         return memo[(i,s)]
-
-#     def findTargetSumWays(self, nums: List[int], target: int) -> int:
-#         # knapsack topdown
-#         # complexity: time O(n*target), mem O(n*target)
-#         n = len(nums)
-#         if sum(nums) < target:
-#             return 0
-#         memo = defaultdict(int)
-#         return self.dp(nums, n, target, memo, 0, 0)
+        return dfs(0, target)
