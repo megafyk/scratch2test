@@ -284,5 +284,6 @@ server.crt
 
 venv
 
+data/
 data.csv
 data_out.csv
