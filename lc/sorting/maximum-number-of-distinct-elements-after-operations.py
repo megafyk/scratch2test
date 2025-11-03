@@ -1,5 +1,7 @@
 class Solution:
     def maxDistinctElements(self, nums: List[int], k: int) -> int:
+        # sorting
+        # time O(n), space O(1)
         n = len(nums)
         nums.sort()
         prev = -sys.maxsize
@@ -13,6 +15,8 @@ class Solution:
 
 class Solution1:
     def maxDistinctElements(self, nums: List[int], k: int) -> int:
+        # binary search
+        # time O(nlogn + nlogk), space O(1)
         n = len(nums)
         nums.sort()
         prev = -sys.maxsize
