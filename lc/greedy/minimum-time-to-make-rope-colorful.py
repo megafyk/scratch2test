@@ -1,7 +1,22 @@
-from typing import List
-
-
 class Solution:
+    def minCost(self, colors: str, neededTime: List[int]) -> int:
+        # greedy
+        # time O(n), space O(1)
+        n = len(colors)
+        res = 0
+        prev = -1
+        for i in range(n):
+            if prev != -1 and colors[prev] == colors[i]:
+                if neededTime[prev] < neededTime[i]:
+                    res += neededTime[prev]
+                    prev = i
+                else:
+                    res += neededTime[i]
+            else:
+                prev = i
+        return res
+    
+class Solution1:
     def minCost(self, colors: str, neededTime: List[int]) -> int:
         res = 0
         idx = 0
