@@ -27,14 +27,16 @@ class Solution:
             if node.right: st.append(node.right)
         return False
 
+class Solution1:
+    def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
+        def check(node, cur):
+            if not cur: return True
+            if not node or node.val != cur.val: return False
+            return check(node.left, cur.next) or check(node.right, cur.next)
 
-    # def dfs(self, head, node):
-    #     if not head: return True
-    #     if not node: return False
-    #     if node.val != head.val: return False
-    #     return self.dfs(head.next, node.left) or self.dfs(head.next, node.right)
-
-    # def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
-    #     # complexity: time O(n * m), mem O(n + m)
-    #     if not root: return False
-    #     return self.dfs(head, root) or self.isSubPath(head, root.left) or self.isSubPath(head, root.right)
+        def dfs(node):
+            if not node: return False
+            if check(node, head):
+                return True
+            return dfs(node.left) or dfs(node.right)
+        return dfs(root)
