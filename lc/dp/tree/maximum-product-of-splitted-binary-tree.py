@@ -4,8 +4,47 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
 
 class Solution:
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        mod = 10 ** 9 + 7
+        node_sum = []
+        def dfs(node):
+            if not node: return 0
+            res = node.val + dfs(node.left) + dfs(node.right)
+            node_sum.append(res)
+            return res
+        root_sum = dfs(root)
+        res = 0
+        for s in node_sum:
+            res = max(res, s * (root_sum - s))
+        return res % mod
+
+
+class Solution1:
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
+        mod = 10 ** 9 + 7
+        def dfs(node):
+            if not node: return 0
+            node.val += dfs(node.left) + dfs(node.right)
+            return node.val
+        
+        def dp(node):
+            if not node: return 0
+            res = node.val * (root.val - node.val)
+            return max(res, dp(node.left), dp(node.right))
+        
+        dfs(root)
+        
+        return dp(root) % mod
+    
+class Solution2:
     def maxProduct(self, root: Optional[TreeNode]) -> int:
         # dp on tree
         # time O(n), space O(h)
