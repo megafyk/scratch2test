@@ -44,5 +44,5 @@ class Solution1:
         elif r == 2:
             return max(total - min2, total - (min1 + min11))
         else:
-            return 0
+            return total
                     
