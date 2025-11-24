@@ -18,3 +18,31 @@ class Solution:
             self.assign(t1, dp)
             self.assign(t2, dp)
         return dp[0]
+
+class Solution1:
+    def maxSumDivThree(self, nums: List[int]) -> int:
+        n = len(nums)
+        total = 0
+        min1 = min11 = min2 = min22 = sys.maxsize
+        for i in range(n):
+            total += nums[i]
+            r = nums[i] % 3
+            if r == 1:
+                if nums[i] < min1:
+                    min1, min11 = nums[i], min1
+                elif nums[i] < min11:
+                    min11 = nums[i]
+            elif r == 2:
+                if nums[i] < min2:
+                    min2, min22 = nums[i], min2
+                elif nums[i] < min22:
+                    min22 = nums[i]
+                    
+        r = total % 3
+        if r == 1:
+            return max(total - min1, total - (min2 + min22))
+        elif r == 2:
+            return max(total - min2, total - (min1 + min11))
+        else:
+            return total
+                    
