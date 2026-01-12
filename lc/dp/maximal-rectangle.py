@@ -30,3 +30,27 @@ class Solution:
             for idx, height in st:
                 res = max(res, (len(row) - idx) * height)
         return res
+
+
+class Solution1:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        # dp
+        # time O(m*n*n), space O(n^2)
+        m = len(matrix)
+        n = len(matrix[0])
+        dp = [[0] * (n+1) for _ in range(n)]
+        res = 0
+        
+        for i in range(m):
+            nw_dp = [[0] * (n+1) for _ in range(n)]
+            r_l = 0
+            for j in range(n):
+                if matrix[i][j] == "1":
+                    r_l +=1
+                    for l in range(1, r_l + 1):
+                        nw_dp[j][l] = dp[j][l] + l
+                        res = max(res, nw_dp[j][l])
+                else:
+                    r_l = 0
+            dp = nw_dp
+        return res
