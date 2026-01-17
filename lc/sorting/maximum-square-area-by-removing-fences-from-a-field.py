@@ -1,7 +1,7 @@
 class Solution:
     def maximizeSquareArea(self, m: int, n: int, hs: List[int], vs: List[int]) -> int:
         # sorting
-        # time O(m^2 + n^2), space O(m+n)
+        # time O(m^2 + n^2), space O(1)
         mod = 10 ** 9 + 7
 
         def find_diff(arr, b):
