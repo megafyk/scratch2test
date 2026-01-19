@@ -1,55 +1,52 @@
-# ===================================================================
-# 1. MINIMIZE k → Find the smallest value where condition(k) is True
-# ===================================================================
-def binary_search_min_k(array) -> int:
-    def condition(value) -> bool:
-        pass
+from typing import Callable, Sequence, Optional
+
+# ============================================================
+# 1) MINIMIZE k: smallest k such that condition(k) is True
+#    Requires: condition is False...False, then True...True
+# ============================================================
+def binary_search_min_k(left: int, right: int, condition: Callable[[int], bool]) -> int:
     """
-    Use when: You want the SMALLEST k such that condition(k) == True
-    Example: Minimum capacity to ship packages, minimum days, etc.
+    Returns the smallest k in [left, right] with condition(k) == True.
+    Assumes such k exists (i.e., condition(right) is True).
     """
-    left, right = min(search_space), max(search_space) # could be [0, n], [1, n] etc. Depends on problem
     while left < right:
         mid = left + (right - left) // 2
         if condition(mid):
-            right = mid # move left to find smaller k
+            right = mid
         else:
             left = mid + 1
     return left
 
-# ===================================================================
-# 2. MAXIMIZE k → Find the largest value where condition(k) is True
-# ===================================================================
-def binary_search_max_k(array) -> int:
-    def condition(value) -> bool:
-        pass
+# ============================================================
+# 2) MAXIMIZE k: largest k such that condition(k) is True
+#    Requires: True...True, then False...False (or equivalent)
+# ============================================================
+def binary_search_max_k(left: int, right: int, condition: Callable[[int], bool]) -> int:
     """
-    Use when: You want the LARGEST k such that condition(k) == True
-    Example: Max eating speed, max length of subarray, etc.
+    Returns the largest k in [left, right] with condition(k) == True.
+    Assumes such k exists (i.e., condition(left) is True).
     """
-    left, right = min(search_space), max(search_space) # could be [0, n], [1, n] etc. Depends on problem
     while left < right:
-        mid = left + (right - left + 1) // 2
+        mid = left + (right - left + 1) // 2  # bias right
         if condition(mid):
-            left = mid # move right to find larger k
+            left = mid
         else:
             right = mid - 1
     return left
 
-# ===================================================================
-# 3. CLASSIC: Find if target exists in sorted array
-# ===================================================================
-def binary_search_if_exists(array, num) -> int:
-    """
-    Standard search in sorted array → return index or -1
-    """
-    left, right = min(search_space), max(search_space) # could be [0, n], [1, n] etc. Depends on problem
-    while left <= right: # because we include mid
+# ============================================================
+# 3) CLASSIC: find target index in sorted array
+# ============================================================
+def binary_search_if_exists(array: Sequence[int], target: int) -> int:
+    if not array:
+        return -1
+    left, right = 0, len(array) - 1
+    while left <= right:
         mid = left + (right - left) // 2
-        if array[mid] == num:
+        if array[mid] == target:
             return mid
-        elif array[mid] > num:
-            right = mid - 1
-        else:
+        if array[mid] < target:
             left = mid + 1
+        else:
+            right = mid - 1
     return -1
