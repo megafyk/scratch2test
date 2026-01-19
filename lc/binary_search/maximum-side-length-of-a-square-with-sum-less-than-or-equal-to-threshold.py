@@ -43,8 +43,6 @@ class Solution1:
                 s += mat[i][j-length]
             if i-length >= 0 and j-length >= 0:
                 s -= mat[i-length][j-length]
-            if i == 1 and j == 1:
-                print(mat[i][j], s)
 
             return (mat[i][j] - s) <= threshold
 
