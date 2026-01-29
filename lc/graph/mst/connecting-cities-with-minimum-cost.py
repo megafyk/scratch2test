@@ -46,6 +46,8 @@ class Solution1:
     @return: 
     """
     def minimum_cost(self, n: int, connections: List[List[int]]) -> int:
+        # mst prim
+        # time O(ElogV), space O(n)
         adj = defaultdict(list)
         for u,v,w in connections:
             adj[u].append((v,w))
