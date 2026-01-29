@@ -1,4 +1,47 @@
 class Solution:
+    def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:    
+        # djikstra
+        # n = len(source)
+        # e = len(changed)
+        # time O(n + 26*eloge), space O(e)
+        adj = defaultdict(list)
+        for i in range(len(original)):
+            pos_s = ord(original[i]) - ord('a')
+            pos_t = ord(changed[i]) - ord('a')
+            adj[pos_s].append((pos_t, cost[i]))
+        
+        inf = sys.maxsize
+        def min_cost(c_pos):
+            dist = [inf] * 26
+
+            dist[c_pos] = 0
+            pq = [(0, c_pos)]
+            while pq:
+                w, u = heappop(pq)
+                for v,wv in adj[u]:
+                    nw_w = w + wv
+                    if nw_w < dist[v]:
+                        dist[v] = nw_w
+                        heappush(pq, (nw_w, v))
+            return dist
+
+        min_cost_map = defaultdict(int)
+        for i in range(26):
+            min_cost_map[i] = min_cost(i)
+
+        cost = 0
+        for i in range(len(source)):
+            if source[i] == target[i]:
+                continue
+            pos1 = ord(source[i]) - ord('a')
+            pos2 = ord(target[i]) - ord('a')
+            
+            if min_cost_map[pos1][pos2] == inf:
+                return -1
+
+            cost += min_cost_map[pos1][pos2]
+        return cost
+class Solution1:
     def ch2int(self, c):
         return ord(c) - ord("a")
 
