@@ -38,3 +38,32 @@ class Solution:
             if cnt_edge == n-1:
                 return res
         return -1
+    
+class Solution1:
+    """
+    @param n: the number of cities
+    @param connections: the connection info between cities
+    @return: 
+    """
+    def minimum_cost(self, n: int, connections: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        for u,v,w in connections:
+            adj[u].append((v,w))
+            adj[v].append((u,w))
+        
+        pq = [(0,1)] # weight, u
+        visit = set()
+
+        min_cost = 0
+        while pq:
+            w,u = heappop(pq)
+            if u in visit:
+                continue
+            visit.add(u)
+            min_cost += w
+            if len(visit) == n:
+                return min_cost
+            for v, nw in adj[u]:
+                if (v not in visit):
+                    heappush(pq, (nw, v))
+        return -1
