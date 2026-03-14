@@ -1,25 +1,21 @@
 class Solution:
     def getHappyString(self, n: int, k: int) -> str:
-        # array partition size
+        # binary tree
         # time O(n), space O(n)
-        total_happy = 3 * (2 ** (n - 1))
-        l, r = 1, total_happy
+        if k > 3 * (1 << (n-1)):
+            return ""
         res = []
-        choices = "abc"
+        prev = ""
         for i in range(n):
-            cur = l
-            partition_size = (r - l + 1) // (len(choices))
-            for c in choices:
-                if cur <= k < cur + partition_size:
-                    res.append(c)
-                    l = cur
-                    r = cur + partition_size - 1
-                    choices = "abc".replace(c, "")
-                    break
-                cur += partition_size
-
-        return "".join(res)
-
+            for c in "abc":
+                if c != prev:
+                    if k > 1 << (n-i-1):
+                        k -= 1 << (n-i-1)
+                    else:
+                        res.append(c)
+                        prev = c
+                        break
+        return ''.join(res)
 
 class Solution1:
     def getHappyString(self, n: int, k: int) -> str:
