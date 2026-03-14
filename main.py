@@ -1,53 +1,71 @@
-from collections import defaultdict
-from typing import List
+class UnionFind:
+        def __init__(self, n):
+            self.par = [i for i in range(n)]
 
+        def find(self, u):
+            if u != self.par[u]:
+                self.par[u] = self.find(self.par[u])
+            return self.par[u]
 
+        def union(self, u, v):
+            p1 = self.find(u)
+            p2 = self.find(v)
+            if p1 == p2: 
+                return False
+            if p1 < p2:
+                self.par[p2] = p1
+            else:
+                self.par[p1] = p2
+            return True
 class Solution:
-    def countSequences(self, nums: List[int], K: int) -> int:
-        n = len(nums)
+    def minCostToSupplyWater(self, n, wells, pipes):
+        for v, c in enumerate(wells):
+            pipes.append([0,v+1,c])
+        pipes.sort(key=lambda x: x[-1])
+        uf = UnionFind(n+1)
 
-        x = defaultdict(int)
-        y = defaultdict(int)
-
-        def dfs(i):
-            if i == n:
-                xx = 1
-                for k, v in x.items():
-                    if k in y:
-                        v -= min(v, y[k])
-                    xx *= k**v
-
-                yy = 1
-                for k, v in y.items():
-                    if k in x:
-                        v -= min(v, x[k])
-                    yy *= k**v
-
-                if xx / yy == K:
-                    return 1
-                return 0
-
-            cnt = 0
-            x[nums[i]] += 1
-            cnt += dfs(i + 1)
-            x[nums[i]] -= 1
-
-            y[nums[i]] += 1
-            cnt += dfs(i + 1)
-            y[nums[i]] -= 1
-
-            cnt += dfs(i + 1)
-            return cnt
-
-        return dfs(0)
+        cnt_edges = 0
+        mi_cost = 0
+        for u,v,w in pipes:
+            if uf.union(u,v):
+                mi_cost += w
+                cnt_edges += 1
+                if cnt_edges == n:
+                    return mi_cost
+        return -1
 
 
-if __name__ == "__main__":
-    s = Solution()
-    nums = [5, 3, 3, 5, 4, 1, 2, 6, 6, 6, 6]
-    k = 2
-    import time
-    start_time = time.perf_counter()
-    res = s.countSequences(nums, k)
-    end_time = time.perf_counter()
-    print(res, end_time - start_time)
+from collections import defaultdict
+from heapq import heappush, heappop
+
+
+class Solution1:
+    def minCostToSupplyWater(self, n, wells, pipes):
+        # prim's algo
+        adj = defaultdict(list)
+        for v, cost in enumerate(wells):
+            adj[0].append((cost, v + 1))
+            adj[v + 1].append((cost, 0))
+
+        for u, v, cost in pipes:
+            adj[u].append((cost, v))
+            adj[v].append((cost, u))
+
+        pq = [(0, 0)]  # dist, node
+        visit = set()
+        mi_cost = 0
+        while pq and len(visit) < n + 1:
+            c, u = heappop(pq)
+            if u in visit:
+                continue
+            visit.add(u)
+            mi_cost += c
+            for cost, v in adj[u]:
+                if v not in visit:
+                    heappush(pq, (cost, v))
+        return mi_cost
+
+
+s = Solution()
+print(s.minCostToSupplyWater(3, [1, 2, 2], [[1, 2, 1], [2, 3, 1]]))
+print(s.minCostToSupplyWater(2, [1, 1], [[1, 2, 1], [1, 2, 2]]))
