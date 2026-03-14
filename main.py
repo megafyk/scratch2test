@@ -1,34 +1,53 @@
-import sys
+from collections import defaultdict
+from typing import List
+
 
 class Solution:
-    def min_cost(self, cost, pair_cost, k):
-        # dp interval
-        # time O(n*n*k), space O(n*n)
-        n = len(cost) 
-        k = min(k, n//2)
-        dp = [[[sys.maxsize] * n for _ in range(n)] for _ in range(2)]
+    def countSequences(self, nums: List[int], K: int) -> int:
+        n = len(nums)
 
-        # base case
-        for i in range(n):
-            dp[0][i][i] = cost[i]
-            dp[1][i][i] = cost[i]
+        x = defaultdict(int)
+        y = defaultdict(int)
 
-        for kk in range(k+1):
-            cur = kk % 2
-            prev = (kk - 1) % 2
-            for length in range(2, n+1):
-                for i in range(n-length+1):
-                    j = i + length - 1
-                    mi = min(cost[i] + dp[cur][i+1][j], cost[j] + dp[cur][i][j-1])
-                    
-                    if kk > 0:
-                        mi = min(mi, pair_cost + dp[prev][i+1][j-1])
-                    dp[cur][i][j] = mi
-        return dp[k%2][0][n-1]
+        def dfs(i):
+            if i == n:
+                xx = 1
+                for k, v in x.items():
+                    if k in y:
+                        v -= min(v, y[k])
+                    xx *= k**v
+
+                yy = 1
+                for k, v in y.items():
+                    if k in x:
+                        v -= min(v, x[k])
+                    yy *= k**v
+
+                if xx / yy == K:
+                    return 1
+                return 0
+
+            cnt = 0
+            x[nums[i]] += 1
+            cnt += dfs(i + 1)
+            x[nums[i]] -= 1
+
+            y[nums[i]] += 1
+            cnt += dfs(i + 1)
+            y[nums[i]] -= 1
+
+            cnt += dfs(i + 1)
+            return cnt
+
+        return dfs(0)
+
 
 if __name__ == "__main__":
     s = Solution()
-    cost = [8,2,9,4]
-    pair_cost = 10
-    k = 1
-    print(s.min_cost(cost, pair_cost, k))
+    nums = [5, 3, 3, 5, 4, 1, 2, 6, 6, 6, 6]
+    k = 2
+    import time
+    start_time = time.perf_counter()
+    res = s.countSequences(nums, k)
+    end_time = time.perf_counter()
+    print(res, end_time - start_time)
