@@ -16,4 +16,6 @@ class Solution:
                     s -= grid[i-1][j-1]
                 grid[i][j] = s
                 cnt += 1 if s <= k else 0
+                if s > k:
+                    break
         return cnt
