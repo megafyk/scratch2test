@@ -1,27 +1,13 @@
-#include <string>
 #include <iostream>
-
-class Printer
-{
-public:
-    virtual void print(const std::string &document);
-};
-class Scanner
-{
-public:
-    virtual void scan(std::string &document);
-};
+#include <thread>
 
 int main()
 {
-    try
-    {
-        /* code */
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
-    
+    std::thread t1([]() {
+        std::cout << "Hello from thread 1!" << std::endl;
+    });
+    std::thread t2([]() {
+        std::cout << "Hello from thread 2!" << std::endl;
+    });
     return 0;
 }
