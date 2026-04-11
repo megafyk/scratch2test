@@ -9,5 +9,6 @@ int main()
     std::thread t2([]() {
         std::cout << "Hello from thread 2!" << std::endl;
     });
+
     return 0;
 }
