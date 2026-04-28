@@ -1,17 +1,19 @@
 #pragma once
+#include <cstddef>
 namespace dsa::data_structures::arrays
 {
-template <typename T> class mvector
+template <typename T> class Mvector
 {
   private:
-    /* data */
+    std::size_t size_;
+    std::size_t capacity_;
+    T *data_;
+    
   public:
-    mvector(/* args */);
-    ~mvector();
+    Mvector();
+    ~Mvector();
+
+    std::size_t size();
 };
-
-mvector::mvector(/* args */) {}
-
-mvector::~mvector() {}
 
 } // namespace dsa::data_structures::arrays
