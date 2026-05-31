@@ -1,47 +1,36 @@
 # Structure Guide
 
-## Public Headers
+## Library (header-only)
 
-- `include/dsa/data_structures/`: public interfaces for custom containers and supporting nodes.
-- `include/dsa/algorithms/`: public interfaces for algorithm families.
-- `include/dsa/common/`: shared types, utilities, and helpers.
+Everything is templates, so the `dsa` library is header-only — there is no `src/`.
+Implement method bodies inline in the header (required for templates).
 
-## Source Layout
+- `include/dsa/data_structures/<category>/<name>.hpp`: one structure per header, in
+  namespace `dsa::data_structures::<category>`.
+- `include/dsa/algorithms/<family>/...`: algorithm families (add when you start them).
 
-- `src/data_structures/`: implementations that mirror the public header hierarchy.
-- `src/algorithms/`: implementations that mirror the public header hierarchy.
-- `src/common/`: shared internal utilities.
+Currently present (as stubs):
 
-## Categories
+- `data_structures/arrays/mvector.hpp`
+- `data_structures/hash_tables/hash_table.hpp`
 
-### Data Structures
+Folders for the other categories are created on demand: copy a template and make the
+directory when you start that topic. See [ROADMAP.md](ROADMAP.md) for the full list.
 
-- `arrays/`
-- `linked_lists/`
-- `stacks/`
-- `queues/`
-- `hash_tables/`
-- `heaps/`
-- `trees/`
-- `graphs/`
-- `tries/`
-- `disjoint_sets/`
+## Tests
 
-### Algorithms
+- `tests/test_utils.hpp`: zero-dependency harness — `CHECK`, `CHECK_EQ`, and
+  `dsa::test::summary()`.
+- `tests/unit/<name>_test.cpp`: one focused suite per structure, registered with
+  `dsa_add_unit_test(<name>_test)` in `tests/CMakeLists.txt`.
+- Tests compile with `-Wall -Wextra -Wpedantic` and, by default, ASan + UBSan.
 
-- `sorting/`
-- `searching/`
-- `graph/`
-- `dynamic_programming/`
-- `greedy/`
-- `backtracking/`
-- `string/`
-- `math/`
+## Templates
 
-## Validation and Tooling
+- `templates/data_structure.hpp` and `templates/unit_test.cpp`: copy-ready scaffolds
+  for adding a new structure and its test. Not part of the build.
 
-- `tests/unit/`: small focused correctness tests.
-- `tests/integration/`: larger end-to-end scenarios.
-- `benchmarks/`: performance comparisons and profiling harnesses.
-- `examples/`: quick manual demos and usage notes.
-- `cmake/`: reusable CMake modules if the project grows.
+## Other
+
+- `examples/`: optional manual demos (`-DDSA_BUILD_EXAMPLES=ON`).
+- `benchmarks/`: optional performance checks (`-DDSA_BUILD_BENCHMARKS=ON`).
