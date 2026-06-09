@@ -48,8 +48,27 @@ public:
       }
     }
   }
+
+  std::optional<Data> get(Key key) {
+    size_t start = key % size_;
+    size_t cur = start;
+
+    while (true) {
+      std::optional<Data> cur_val = bucket_[cur];
+      if (!cur_val.has_value()) {
+        break;
+      } else if (cur_val.has_value() && cur_val.value().key == key) {
+        return cur_val;
+      }
+      cur = (cur + 1) % size_;
+      if (cur == start) {
+        break;
+      }
+    }
+    return std::nullopt;
+  }
+
   bool exists(Key key);
-  Value get(Key key);
   void remove(Key key);
 };
 } // namespace dsa
