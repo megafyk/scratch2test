@@ -1,6 +1,7 @@
 
 // tests/data_structures/test_hash_table.cpp
 #include "data_structures/hash_table.h"
+#include <cstdio>
 #include <gtest/gtest.h>
 
 TEST(HashTable, constructor) {
@@ -68,4 +69,34 @@ TEST(HashTable, get) {
     EXPECT_EQ("red", hashTable.get(0).value().val);
     EXPECT_EQ("green", hashTable.get(1).value().val);
     ASSERT_TRUE(!hashTable.get(2).has_value());
+}
+
+TEST(HashTable, exists) {
+    int universal = 3;
+    dsa::HashTable<int, std::string> hashTable(universal);
+    hashTable.add(0, "red");
+    hashTable.add(1, "green");
+    hashTable.add(3, "blue");
+    ASSERT_TRUE(hashTable.exists(1));
+    ASSERT_TRUE(hashTable.exists(3));
+}
+
+TEST(HashTable, not_exists) {
+    int universal = 3;
+    dsa::HashTable<int, std::string> hashTable(universal);
+    hashTable.add(0, "red");
+    hashTable.add(1, "green");
+    hashTable.add(3, "blue");
+    ASSERT_TRUE(!hashTable.exists(4));
+}
+
+TEST(HashTable, remove) {
+    int universal = 3;
+    dsa::HashTable<int, std::string> hashTable(universal);
+    hashTable.add(0, "red");
+    hashTable.add(1, "green");
+    hashTable.add(3, "blue");
+    hashTable.remove(3);
+    EXPECT_EQ(hashTable.get(3).value().status, "TOMBSTONE");
+
 }

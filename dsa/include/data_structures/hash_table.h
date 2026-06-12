@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <iterator>
 #include <optional>
 #include <string>
 #include <vector>
@@ -68,7 +69,26 @@ public:
     return std::nullopt;
   }
 
-  bool exists(Key key);
-  void remove(Key key);
+  bool exists(Key key) { return get(key) != std::nullopt; }
+
+  void remove(Key key) {
+    std::size_t start = key % size_;
+    std::size_t cur = start;
+    while (true) {
+        auto& cur_data = bucket_[cur];
+        if(!cur_data.has_value()) {
+            return;
+        } else {
+            if(cur_data->key == key && cur_data->status == "ACTIVE") {
+                cur_data->status = "TOMBSTONE";
+                return;
+            }
+        }
+        cur = (cur + 1) % size_;
+        if (cur == start) {
+            return;
+        }
+    }
+  }
 };
 } // namespace dsa
