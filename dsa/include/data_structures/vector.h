@@ -36,5 +36,14 @@ public:
       }
       return array_[index];
   }
+
+  void insert(size_t index, T val) {
+      push(val);
+      for(size_t i = size_ - 1; i > index; --i) {
+          auto tmp = array_[i-1];
+          array_[i-1] = array_[i];
+          array_[i] = tmp;
+      }
+  }
 };
 } // namespace dsa

@@ -18,3 +18,13 @@ TEST(Vector, push) {
     vector.push(10);
     EXPECT_EQ(vector.at(0), 10);
 }
+
+TEST(Vector, insert) {
+    Vector<int> vector;
+    for(auto i = 0; i < 16; ++i) {
+        vector.push(i);
+    }
+    vector.insert(10, 10);
+    EXPECT_EQ(vector.capacity(), 32);
+    EXPECT_EQ(vector.at(10), 10);
+}
