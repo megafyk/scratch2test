@@ -28,3 +28,27 @@ TEST(Vector, insert) {
     EXPECT_EQ(vector.capacity(), 32);
     EXPECT_EQ(vector.at(10), 10);
 }
+
+TEST(Vector, pop) {
+    Vector<int> vector;
+    for(auto i = 0; i < 16; ++i) {
+        vector.push(i);
+    }
+
+    EXPECT_EQ(vector.pop(), 15);
+    EXPECT_EQ(vector.size(), 15);
+}
+
+TEST(Vector, del) {
+    Vector<int> vector;
+    for(auto i = 0; i < 16; ++i) {
+        vector.push(i);
+    }
+    std::cout << vector.size() << std::endl;
+    vector.del(15);
+    EXPECT_EQ(vector.at(14), 14);
+    EXPECT_EQ(vector.size(), 15);
+    vector.del(10);
+    EXPECT_EQ(vector.at(10), 11);
+    EXPECT_EQ(vector.size(), 14);
+}
