@@ -16,3 +16,9 @@ add_executable(test_vector data_structures/test_vector.cpp)
 target_include_directories(test_vector PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(test_vector GTest::gtest_main)
 gtest_discover_tests(test_vector)
+
+
+add_executable(test_deque data_structures/test_deque.cpp)
+target_include_directories(test_deque PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(test_deque GTest::gtest_main)
+gtest_discover_tests(test_deque)
