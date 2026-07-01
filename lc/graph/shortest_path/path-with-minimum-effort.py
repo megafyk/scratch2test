@@ -1,39 +1,65 @@
-from heapq import heappop, heappush
-
-
 class Solution:
     def minimumEffortPath(self, heights: List[List[int]]) -> int:
-        row = len(heights)
-        col = len(heights[0])
-
-        visited = set()
-
-        pq = [(0, 0, 0)]
-        dis = [[float("inf")] * col for _ in range(row)]
-        dis[0][0] = 0
-        adj = [(0, -1), (-1, 0), (1, 0), (0, 1)]
-
+        # custom dijkstra
+        # time O((m*n)log(m*n)), space O(m*n)
+        m, n = len(heights), len(heights[0])
+        dirs = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+        dist = [[inf] * n for _ in range(m)]
+        dist[0][0] = 0
+        pq = [(0, 0, 0)]  # min heap
         while pq:
-            d, i, j = heappop(pq)
-
-            if i + 1 == row and j + 1 == col:
+            d, x, y = heappop(pq)
+            if (x, y) == (m - 1, n - 1):
                 return d
+            for dx, dy in dirs:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < m and 0 <= ny < n:
+                    nxt_d = max(d, abs(heights[x][y] - heights[nx][ny]))
+                    if nxt_d < dist[nx][ny]:
+                        dist[nx][ny] = nxt_d
+                        heappush(pq, (nxt_d, nx, ny))
+        return inf
 
-            visited.add((i, j))
 
-            for dx, dy in adj:
-                x = i + dx
-                y = j + dy
+class Solution1:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
+        # binary search on result, find exists path with edge <= max_effort
+        # time O(m*n + m*n*log(max(height))), space O(m*n)
+        m, n = len(heights), len(heights[0])
+        dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        mx_effort = 0
+        for x in range(m):
+            for y in range(n):
+                for dx, dy in dirs:
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < m and 0 <= ny < n:
+                        mx_effort = max(mx_effort, abs(heights[x][y] - heights[nx][ny]))
 
-                if x >= row or x < 0 or y >= col or y < 0:
-                    continue
-                if (x, y) in visited:
-                    continue
+        def path_exists(lim_effort):
+            q = deque([(0, 0)])
+            visit = set()
+            visit.add((0, 0))
+            while q:
+                x, y = q.popleft()
+                if (x, y) == (m - 1, n - 1):
+                    return True
+                for dx, dy in dirs:
+                    nx, ny = x + dx, y + dy
+                    if (
+                        0 <= nx < m
+                        and 0 <= ny < n
+                        and (nx, ny) not in visit
+                        and abs(heights[x][y] - heights[nx][ny]) <= lim_effort
+                    ):
+                        q.append((nx, ny))
+                        visit.add((nx, ny))
+            return False
 
-                new_diff = abs(heights[x][y] - heights[i][j])
-                max_diff = max(new_diff, dis[i][j])
-                if max_diff < dis[x][y]:
-                    dis[x][y] = max_diff
-                    heappush(pq, (max_diff, x, y))
-
-        return 0
+        l, r = 0, mx_effort
+        while l < r:
+            mid = l + (r - l) // 2
+            if path_exists(mid):
+                r = mid
+            else:
+                l = mid + 1
+        return l
