@@ -1,3 +1,36 @@
+class Solution:
+    def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
+        adj = defaultdict(list)
+        for u, v in edges:
+            adj[u].append(v)
+            adj[v].append(u)
+
+        visit = set()
+
+        def check_complete(start):
+            q = deque()
+            q.append(start)
+            cnt_v = cnt_e = 0
+            visit.add(start)
+            while q:
+                u = q.popleft()
+                cnt_v += 1
+                cnt_e += len(adj[u])
+                for v in adj[u]:
+                    if v not in visit:
+                        visit.add(v)
+                        q.append(v)
+            return cnt_e == (cnt_v - 1) * (cnt_v)
+
+        res = 0
+        for u in range(n):
+            if u in visit:
+                continue
+            if check_complete(u):
+                res += 1
+        return res
+
+
 class UnionFind:
     def __init__(self, n):
         self.par = list(range(n))
@@ -18,8 +51,9 @@ class UnionFind:
             self.par[p2] = p1
         else:
             self.par[p1] = p2
-            
-class Solution:
+
+
+class Solution1:
     def countCompleteComponents(self, n: int, edges: List[List[int]]) -> int:
         # graph union find
         # time O(E + VlogV + V^2), space O(V)
@@ -35,9 +69,9 @@ class Solution:
         for i in range(n):
             p = uf.find(i)
             components[p].append(i)
-        
+
         res = 0
-        
+
         for r, arr in components.items():
             completed = True
             for u in arr:
