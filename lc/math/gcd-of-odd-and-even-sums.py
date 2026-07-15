@@ -1,6 +1,11 @@
 class Solution:
     def gcdOfOddEvenSums(self, n: int) -> int:
         # math
+        return n
+
+class Solution:
+    def gcdOfOddEvenSums(self, n: int) -> int:
+        # math
         def gcd(a,b):
             if a > b:
                 a,b = b,a
