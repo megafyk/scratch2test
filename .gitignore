@@ -288,3 +288,7 @@ data/
 data.csv
 data_out.csv
 main
+
+yt/downloads/
+
+.debug
