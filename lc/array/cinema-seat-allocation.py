@@ -17,7 +17,7 @@ class Solution:
             sub = 2
             if gg1 and gg3:
                 sub = 0
-            elif gg1 or gg3:
+            elif gg1 or gg2 or gg3:
                 sub = 1
             mx_group -= sub
 
